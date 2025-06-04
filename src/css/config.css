@@ -95,6 +95,21 @@ tbody tr {
   margin: 0 !important;
 }
 
+.operation-column {
+  border: none !important;
+  width: 100% !important;
+  padding: 0 !important;
+}
+
+#appID {
+  width: 70px;
+}
+
+.kintoneplugin-table td {
+
+  border-width: 1px;
+}
+
 #kintoneplugin-setting-space th:first-child {
   width: 5%;
 }
@@ -142,6 +157,7 @@ tbody tr {
 .addRow-main {
   margin-top: 6px;
 }
+
 .removeRow-main {
   margin-top: 6px;
 }

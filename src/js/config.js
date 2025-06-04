@@ -8,21 +8,22 @@ jQuery.noConflict();
 
   // Check row function - fixed class names
   function checkRow() {
-    let rows = $("#kintoneplugin-setting-tspace > tr:not([hidden])");
-    if (rows.length <= 1) {
-      rows.find(".removeRow-main").hide();
+    let $rows = $("#kintoneplugin-setting-tspace > tr:not([hidden])");
+    if ($rows.length <= 1) {
+      $rows.find(".removeRow-main").hide();
     } else {
-      rows.find(".removeRow-main").show();
+      $rows.find(".removeRow-main").show();
     }
   }
 
   // Check sub-row function
   function checkSubRow($subTable) {
-    let subRows = $subTable.find("tbody > tr:not([hidden])");
-    if (subRows.length <= 1) {
-      subRows.find(".removeRow-sub").hide();
+    $subTable = $($subTable);
+    let $subRows = $subTable.find("tbody > tr:not([hidden])");
+    if ($subRows.length <= 1) {
+      $subRows.find(".removeRow-sub").hide();
     } else {
-      subRows.find(".removeRow-sub").show();
+      $subRows.find(".removeRow-sub").show();
     }
   }
 
@@ -32,76 +33,76 @@ jQuery.noConflict();
     let $templateRow = $tbody.find("tr.table-space").first();
 
     if ($templateRow.length && $tbody.find("tr:not([hidden])").length === 0) {
-      let $clonedRow = $templateRow.clone(true).removeAttr("hidden");
+      let clonedRow = $templateRow.clone(true).removeAttr("hidden");
 
       // Clear main row inputs
-      $clonedRow.find('input[type="text"]').val("");
-      $clonedRow.find("select").prop("selectedIndex", 0);
+      clonedRow.find('input[type="text"]').val("");
+      clonedRow.find("select").prop("selectedIndex", 0);
 
       // For sub-layer: ensure at least one visible sub-row
-      $clonedRow.find(".sub-table").each(function () {
-        let $subTbody = $(this).find("tbody");
-        let $subTemplateRow = $subTbody.find("tr").first();
+      clonedRow.find(".sub-table").each(function () {
+        let subTbody = $(this).find("tbody");
+        let subTemplateRow = subTbody.find("tr").first();
 
         // Remove any existing visible sub-rows
-        $subTbody.find("tr:not(:first)").remove();
+        subTbody.find("tr:not(:first)").remove();
 
         // Create first visible sub-row from template
-        if ($subTemplateRow.length) {
-          let $subClonedRow = $subTemplateRow.clone(true).removeAttr("hidden");
-          $subClonedRow.find('input[type="text"]').val("");
-          $subClonedRow.find("select").prop("selectedIndex", 0);
-          $subTbody.append($subClonedRow);
+        if (subTemplateRow.length) {
+          let subClonedRow = subTemplateRow.clone(true).removeAttr("hidden");
+          subClonedRow.find('input[type="text"]').val("");
+          subClonedRow.find("select").prop("selectedIndex", 0);
+          subTbody.append(subClonedRow);
 
           // Initialize sub-row visibility
-          checkSubRow($(this));
+          checkSubRow(this);
         }
       });
 
-      $tbody.append($clonedRow);
+      $tbody.append(clonedRow);
     }
-	
+
     // Initial check for row visibility
     checkRow();
 
     // Main layer add row
     $tbody.on("click", ".addRow-main", function () {
-      let $closestTbody = $(this).closest("tbody");
-      let $templateRow = $closestTbody.find("tr.table-space").first();
-      let $clonedRow = $templateRow.clone(true).removeAttr("hidden");
+      let closestTbody = $(this).closest("tbody");
+      let templateRow = closestTbody.find("tr.table-space").first();
+      let clonedRow = templateRow.clone(true).removeAttr("hidden");
 
       // Clear main row inputs
-      $clonedRow.find('input[type="text"]').val("");
-      $clonedRow.find("select").prop("selectedIndex", 0);
+      clonedRow.find('input[type="text"]').val("");
+      clonedRow.find("select").prop("selectedIndex", 0);
 
       // For sub-layer: reset to have only one visible row
-      $clonedRow.find(".sub-table").each(function () {
-        let $subTbody = $(this).find("tbody");
-        let $subTemplateRow = $subTbody.find("tr").first();
+      clonedRow.find(".sub-table").each(function () {
+        let subTbody = $(this).find("tbody");
+        let subTemplateRow = subTbody.find("tr").first();
 
         // Remove all rows except template
-        $subTbody.find("tr:not(:first)").remove();
+        subTbody.find("tr:not(:first)").remove();
 
         // Create one visible sub-row
-        if ($subTemplateRow.length) {
-          let $subClonedRow = $subTemplateRow.clone(true).removeAttr("hidden");
-          $subClonedRow.find('input[type="text"]').val("");
-          $subClonedRow.find("select").prop("selectedIndex", 0);
-          $subTbody.append($subClonedRow);
+        if (subTemplateRow.length) {
+          let subClonedRow = subTemplateRow.clone(true).removeAttr("hidden");
+          subClonedRow.find('input[type="text"]').val("");
+          subClonedRow.find("select").prop("selectedIndex", 0);
+          subTbody.append(subClonedRow);
 
           // Initialize sub-row visibility
-          checkSubRow($(this));
+          checkSubRow(this);
         }
       });
 
-      $(this).closest("tr").after($clonedRow);
+      $(this).closest("tr").after(clonedRow);
       checkRow();
     });
 
     // Main layer remove row
     $tbody.on("click", ".removeRow-main", function () {
-      let $closestTbody = $(this).closest("tbody");
-      if ($closestTbody.find("tr:not([hidden])").length > 1) {
+      let closestTbody = $(this).closest("tbody");
+      if (closestTbody.find("tr:not([hidden])").length > 1) {
         $(this).closest("tr").remove();
         checkRow();
       }
@@ -109,26 +110,26 @@ jQuery.noConflict();
 
     // Sub-layer add row
     $tbody.on("click", ".addRow-sub", function () {
-      let $subTable = $(this).closest(".sub-table");
-      let $subTbody = $subTable.find("tbody");
-      let $subTemplateRow = $subTbody.find("tr").first();
-      let $subClonedRow = $subTemplateRow.clone(true).removeAttr("hidden");
+      let subTable = $(this).closest(".sub-table");
+      let subTbody = subTable.find("tbody");
+      let subTemplateRow = subTbody.find("tr").first();
+      let subClonedRow = subTemplateRow.clone(true).removeAttr("hidden");
 
-      $subClonedRow.find('input[type="text"]').val("");
-      $subClonedRow.find("select").prop("selectedIndex", 0);
-      $(this).closest("tr").after($subClonedRow);
+      subClonedRow.find('input[type="text"]').val("");
+      subClonedRow.find("select").prop("selectedIndex", 0);
+      $(this).closest("tr").after(subClonedRow);
 
-      checkSubRow($subTable);
+      checkSubRow(subTable);
     });
 
     // Sub-layer remove row
     $tbody.on("click", ".removeRow-sub", function () {
-      let $subTable = $(this).closest(".sub-table");
-      let $subTbody = $subTable.find("tbody");
+      let subTable = $(this).closest(".sub-table");
+      let subTbody = subTable.find("tbody");
 
-      if ($subTbody.find("tr:not([hidden])").length > 1) {
+      if (subTbody.find("tr:not([hidden])").length > 1) {
         $(this).closest("tr").remove();
-        checkSubRow($subTable);
+        checkSubRow(subTable);
       }
     });
   });
@@ -328,6 +329,10 @@ jQuery.noConflict();
       console.log("Config saved successfully!");
       window.location.href = `../../flow?app=${kintone.app.getId()}#section=settings`;
     });
+  });
+
+  $("#cancel").on("click", function () {
+    window.location.href = `../../flow?app=${kintone.app.getId()}#section=settings`;
   });
 
   //   window.RsComAPI.hideSpinner();
