@@ -109,18 +109,97 @@ jQuery.noConflict();
     });
 
     // Sub-layer add row
+    // $tbody.on("click", ".addRow-sub", function () {
+    //   let subTable = $(this).closest(".sub-table");
+    //   let subTbody = subTable.find("tbody");
+    //   let subTemplateRow = subTbody.find("tr").first();
+    //   let subClonedRow = subTemplateRow.clone(true).removeAttr("hidden");
+
+    //   subClonedRow.find('input[type="text"]').val("");
+    //   subClonedRow.find("select").prop("selectedIndex", 0);
+
+    //   $(this).closest("tr").after(subClonedRow);
+
+    //   checkSubRow(subTable);
+    // });
+
+    // Sub-layer add row
+    // $tbody.on("click", ".addRow-sub", function () {
+    //   let subTable = $(this).closest(".sub-table");
+    //   let subTbody = subTable.find("tbody");
+    //   let subTemplateRow = subTbody.find("tr").first();
+    //   let subClonedRow = subTemplateRow.clone(true).removeAttr("hidden");
+
+    //   // Clear values
+    //   subClonedRow.find('input[type="text"]').val("");
+    //   subClonedRow.find("select").prop("selectedIndex", 0);
+
+    //   subClonedRow.find("label.buttonName").hide();
+    //   subClonedRow.find("label.appIDs").hide();
+    //   subClonedRow.find("label.condition").hide();
+    //   subClonedRow
+    //     .find(".ButtonName")
+    //     .closest(".kintoneplugin-input-outer")
+    //     .css("display", "none");
+    //   subClonedRow
+    //     .find(".appID")
+    //     .closest(".kintoneplugin-input-outer")
+    //     .css("display", "none");
+    //   subClonedRow
+    //     .find(".store-field-select-condition")
+    //     .closest(".kintoneplugin-select-outer")
+    //     .css("display", "none");
+
+    //   // subClonedRow.CSS("margin-left", "20px");
+    //   subClonedRow.find("td").first().css("padding-left", "270px");
+
+    //   $(this).closest("tr").after(subClonedRow);
+    //   checkSubRow(subTable);
+    // });
+
     $tbody.on("click", ".addRow-sub", function () {
       let subTable = $(this).closest(".sub-table");
       let subTbody = subTable.find("tbody");
       let subTemplateRow = subTbody.find("tr").first();
+      let currentRow = $(this).closest("tr");
+
+      // Clone the template row
       let subClonedRow = subTemplateRow.clone(true).removeAttr("hidden");
 
-      subClonedRow.find('input[type="text"]').val("");
-      subClonedRow.find("select").prop("selectedIndex", 0);
-      $(this).closest("tr").after(subClonedRow);
+      // Preserve the value of appID from current row
+      let appIDValue = currentRow.find(".appID").val();
+      subClonedRow.find(".appID").val(appIDValue);
 
+      // Clear other input values
+      subClonedRow.find('input[type="text"]').not(".appID").val("");
+      subClonedRow.find("select").prop("selectedIndex", 0);
+
+      // Hide elements
+      subClonedRow.find("label.buttonName").hide();
+      subClonedRow.find("label.appIDs").hide();
+      subClonedRow.find("label.condition").hide();
+      subClonedRow
+        .find(".ButtonName")
+        .closest(".kintoneplugin-input-outer")
+        .css("display", "none");
+      subClonedRow
+        .find(".appID")
+        .closest(".kintoneplugin-input-outer")
+        .css("display", "none");
+      subClonedRow
+        .find(".store-field-select-condition")
+        .closest(".kintoneplugin-select-outer")
+        .css("display", "none");
+
+      // Adjust padding
+      subClonedRow.find("td").first().css("padding-left", "270px");
+
+      // Insert after current row
+      currentRow.after(subClonedRow);
       checkSubRow(subTable);
     });
+
+    console.log("test phong");
 
     // Sub-layer remove row
     $tbody.on("click", ".removeRow-sub", function () {
@@ -169,8 +248,10 @@ jQuery.noConflict();
     let selectedType = selectedOptionA.data("type");
     let selectB = subRow.find(".type-select-field-B");
 
+    console.log("AppID", AppID);
+
     // Guard: If no AppID or invalid selection
-    if (!AppID || !selectedType || selectedText === "-----") {
+    if (!selectedType || selectedText === "-----") {
       selectB.empty();
       selectB.append('<option value="-----">-----</option>');
       return;
